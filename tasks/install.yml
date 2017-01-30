@@ -1,5 +1,4 @@
 ---
-
 - name: install common dependencies
   apt: name={{ item }} state=present update_cache=true
   with_items:
@@ -20,9 +19,7 @@
     - "{{ ffmpeg_bin_dir }}"
     - "{{ ffmpeg_build_dir }}"
 
-
 # Clone git repositories
-
 - name: clone latest yasm
   git: >
     repo=git://github.com/yasm/yasm.git
@@ -87,7 +84,6 @@
 
 
 # Compile
-
 - name: compile yasm
   command: "{{ item }}"
   args:
@@ -111,7 +107,6 @@
     - make
     - make install
     - make distclean
-
 
 - name: compile x265
   environment: "{{ ffmpeg_env }}"
