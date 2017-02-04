@@ -181,11 +181,11 @@
     - make install
     - make distclean
 
-- name: Move ffmpeg binaries to /usr/local/bin
-  command: mv * /usr/local/bin/
+- name: Copy ffmpeg binaries to /usr/local/bin
+  command: cp {{ item }} /usr/local/bin/
   args:
     chdir: "{{ ffmpeg_bin_dir }}"
-    creates: "{{ item }}"
+    creates: "/usr/local/bin/{{ item }}"
   with_items:
      - ffmpeg
      - ffprobe
