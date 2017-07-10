@@ -1,12 +1,13 @@
 ---
 - name: install common dependencies
-  apt: name={{ item }} state=present update_cache=true
+  apt: name={{ item }} state=latest update_cache=true
   with_items:
     - autoconf
     - automake
     - build-essential
     - pkg-config
     - git-core
+    - asciidoc
 
 - name: install ffmpeg stuff
   apt: name={{ item }} state=present
@@ -20,10 +21,10 @@
     - "{{ ffmpeg_build_dir }}"
 
 # Clone git repositories
-- name: clone latest yasm
+- name: clone latest nasm
   git: >
-    repo=git://github.com/yasm/yasm.git
-    dest={{ ffmpeg_source_dir }}/yasm
+    repo=git://repo.or.cz/nasm.git
+    dest={{ ffmpeg_source_dir }}/nasm
     accept_hostkey=true
   ignore_errors: yes
 
@@ -84,11 +85,12 @@
 
 
 # Compile
-- name: compile yasm
+- name: compile nasm
+  environment: "{{ ffmpeg_env }}"
   command: "{{ item }}"
   args:
-    chdir: "{{ ffmpeg_source_dir }}/yasm"
-    creates: "{{ ffmpeg_bin_dir }}/yasm"
+    chdir: "{{ ffmpeg_source_dir }}/nasm"
+    creates: "{{ ffmpeg_bin_dir }}/nasm"
   with_items:
     - ./autogen.sh
     - "./configure --prefix={{ ffmpeg_build_dir }} --bindir={{ ffmpeg_bin_dir }}"
