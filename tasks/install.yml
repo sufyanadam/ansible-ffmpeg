@@ -26,6 +26,7 @@
     repo=git://repo.or.cz/nasm.git
     dest={{ ffmpeg_source_dir }}/nasm
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: clone latest x264
@@ -33,6 +34,7 @@
     repo=git://git.videolan.org/x264.git
     dest={{ ffmpeg_source_dir }}/x264
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: clone latest x265
@@ -40,6 +42,7 @@
     repo=https://github.com/videolan/x265.git
     dest={{ ffmpeg_source_dir }}/x265
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: clone latest fdk-aac
@@ -47,6 +50,7 @@
     repo=https://github.com/mstorsjo/fdk-aac.git
     dest={{ ffmpeg_source_dir }}/fdk-aac
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: clone latest libmp3lame
@@ -54,6 +58,7 @@
     repo=https://github.com/gypified/libmp3lame.git
     dest={{ ffmpeg_source_dir }}/libmp3lame
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: download opus tarball
@@ -74,6 +79,7 @@
     repo=https://chromium.googlesource.com/webm/libvpx.git
     dest={{ ffmpeg_source_dir }}/libvpx
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 - name: clone latest ffmpeg
@@ -81,6 +87,7 @@
     repo=git://github.com/FFmpeg/FFmpeg.git
     dest={{ ffmpeg_source_dir }}/ffmpeg
     accept_hostkey=true
+    update=yes
   ignore_errors: yes
 
 
@@ -105,7 +112,7 @@
     chdir: "{{ ffmpeg_source_dir }}/x264"
     creates: "{{ ffmpeg_bin_dir }}/x264"
   with_items:
-    - ./configure --prefix={{ ffmpeg_build_dir }} --bindir={{ ffmpeg_bin_dir }} --enable-static
+    - "./configure --prefix={{ ffmpeg_build_dir }} --bindir={{ ffmpeg_bin_dir }} --enable-static"
     - make
     - make install
     - make distclean
@@ -130,7 +137,7 @@
     creates: "{{ ffmpeg_build_dir }}/lib/libfdk-aac.a"
   with_items:
     - autoreconf -fiv
-    - ./configure --prefix={{ ffmpeg_build_dir }} --disable-shared
+    - "./configure --prefix={{ ffmpeg_build_dir }} --disable-shared"
     - make
     - make install
     - make distclean
@@ -142,7 +149,7 @@
     chdir: "{{ ffmpeg_source_dir }}/libmp3lame"
     creates: "{{ ffmpeg_build_dir }}/libmp3lame"
   with_items:
-    - ./configure --prefix={{ ffmpeg_build_dir }} --enable-nasm --disable-shared
+    - "./configure --prefix={{ ffmpeg_build_dir }} --enable-nasm --disable-shared"
     - make
     - make install
     - make distclean
@@ -154,7 +161,7 @@
     chdir: "{{ ffmpeg_source_dir }}/opus-1.1"
     creates: "{{ ffmpeg_build_dir }}/lib/libopus.a"
   with_items:
-    - ./configure --prefix={{ ffmpeg_build_dir }} --disable-shared
+    - "./configure --prefix={{ ffmpeg_build_dir }} --disable-shared"
     - make
     - make install
     - make distclean
@@ -166,10 +173,9 @@
     chdir: "{{ ffmpeg_source_dir }}/libvpx"
     creates: "{{ ffmpeg_build_dir }}/libvpx"
   with_items:
-    - ./configure --prefix={{ ffmpeg_build_dir }} --disable-examples --disable-unit-tests
+    - "./configure --prefix={{ ffmpeg_build_dir }} --disable-examples --disable-unit-tests"
     - make
     - make install
-    - make clean
 
 - name: compile ffmpeg
   environment: "{{ ffmpeg_env }}"
@@ -178,7 +184,7 @@
     chdir: "{{ ffmpeg_source_dir }}/ffmpeg"
     creates: "{{ ffmpeg_bin_dir }}/ffmpeg"
   with_items:
-    - ./configure --prefix={{ ffmpeg_build_dir }} --pkg-config-flags="--static" --extra-cflags=-I{{ ffmpeg_build_dir }}/include --extra-ldflags=-L{{ ffmpeg_build_dir }}/lib --bindir={{ ffmpeg_bin_dir }} --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-nonfree
+    - "./configure --prefix={{ ffmpeg_build_dir }} --pkg-config-flags=\"--static\" --extra-cflags=-I{{ ffmpeg_build_dir }}/include --extra-ldflags=-L{{ ffmpeg_build_dir }}/lib --bindir={{ ffmpeg_bin_dir }} --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-nonfree"
     - make
     - make install
     - make distclean
@@ -192,10 +198,8 @@
      - ffmpeg
      - ffprobe
      - ffserver
-     - vsyasm
      - x264
-     - yasm
-     - ytasm
+     - nasm
 
 - name: update manpath map
   shell: 'echo "MANPATH_MAP {{ ffmpeg_bin_dir }} {{ ffmpeg_build_dir }}/share/man" >> /etc/manpath.config'

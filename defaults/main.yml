@@ -1,6 +1,6 @@
 ---
 # defaults file for ffmpeg build role
-ffmpeg_root_dir: "/tmp/ffmpeg"
+ffmpeg_root_dir: "/ffmpeg"
 
 ffmpeg_build_dir: "{{ ffmpeg_root_dir }}/ffmpeg_build_dir"
 ffmpeg_source_dir: "{{ ffmpeg_root_dir }}/ffmpeg_sources"
