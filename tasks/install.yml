@@ -8,7 +8,9 @@
     - pkg-config
     - git-core
     - asciidoc
-
+    - yasm
+    - libfdk-aac-dev
+    
 - name: install ffmpeg stuff
   apt: name={{ item }} state=present
   with_items: "{{ ffmpeg_deps }}"
@@ -112,7 +114,7 @@
     chdir: "{{ ffmpeg_source_dir }}/x264"
     creates: "{{ ffmpeg_bin_dir }}/x264"
   with_items:
-    - "./configure --prefix={{ ffmpeg_build_dir }} --bindir={{ ffmpeg_bin_dir }} --enable-static"
+    - "./configure --prefix={{ ffmpeg_build_dir }} --bindir={{ ffmpeg_bin_dir }} --enable-pic --enable-shared"
     - make
     - make install
     - make distclean

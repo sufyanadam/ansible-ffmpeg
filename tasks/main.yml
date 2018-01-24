@@ -1,8 +1,13 @@
 # Official ffmpeg compilation guide in Ansible style
 # https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 
-- assert:
-    that:
-      - "'{{ ffmpeg_role_action }}' in [ 'install', 'uninstall', 'update']"
+# - assert:
+#     that:
+#       - "'{{ ffmpeg_role_action }}' in [ 'install', 'uninstall', 'update']"
 
-- include: install.yml
+# - include: install.yml
+
+- name: install common dependencies
+  apt: name={{ item }} state=latest update_cache=true
+  with_items:
+    - ffmpeg
